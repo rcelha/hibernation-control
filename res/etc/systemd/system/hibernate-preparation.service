@@ -1,0 +1,14 @@
+[Unit]
+Description=Enable swap file and disable zram before hibernate
+Before=systemd-hibernate.service
+Before=systemd-suspend-then-hibernate.service
+
+[Service]
+User=root
+Type=oneshot
+ExecStart=/usr/bin/sh -c "true"
+; /usr/sbin/swapon /swapfile && /usr/sbin/swapoff /dev/zram0"
+
+[Install]
+WantedBy=systemd-hibernate.service
+WantedBy=systemd-suspend-then-hibernate.service
