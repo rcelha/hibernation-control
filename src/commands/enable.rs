@@ -6,6 +6,7 @@ use cmd_lib::{run_cmd, run_fun};
 use sys_info::mem_info;
 
 use crate::grub;
+use crate::systemd;
 
 pub fn run() -> eyre::Result<()> {
     sanity_check()?;
@@ -13,7 +14,7 @@ pub fn run() -> eyre::Result<()> {
     run_cmd!(info "Enabling hibernation")?;
     backup_files()?;
 
-    create_swapfile()?;
+    // create_swapfile()?;
 
     let uuid = get_uuid()?;
     run_cmd!(info /swapfile uuid=$uuid)?;
@@ -24,31 +25,46 @@ pub fn run() -> eyre::Result<()> {
     set_grub_options(uuid.clone(), offset)?;
     set_initramfs_options(uuid, offset)?;
 
-    // systemd::install()?;
-    // systemd::enable_services()?;
+    systemd::install()?;
 
-    run_cmd!(info you can install the extension "https://extensions.gnome.org/extension/755/hibernate-status-button/" to add hibernate option to your power menu)?;
+    run_cmd!(
+        info Done;
+        info Please restart your system;
+        info After restarting it, you can test your setup with the following command:;
+        info sudo systemctl hibernate;
+    )?;
 
     Ok(())
 }
 
 /// Test for OS dependencies and users' permissions
 pub fn sanity_check() -> eyre::Result<()> {
-    // TODO
+    let uid = unsafe { libc::getuid() };
+    eyre::ensure!(uid == 0, "hibernation-control must be ran as root");
+
+    run_cmd!(info Checking dependencies)?;
+    for i in [
+        "swapoff",
+        "dd",
+        "chmod",
+        "mkswap",
+        "swapon",
+        "findmnt",
+        "filefrag",
+        "grub-mkconfig",
+        "update-initramfs",
+    ] {
+        let test_command = run_fun!(which ${i};);
+        if test_command.is_err() {
+            return Err(eyre::eyre!("Command '{}' not found.", i));
+        }
+    }
     Ok(())
 }
 
 pub fn backup_files() -> eyre::Result<()> {
     let suffix = "hibernation.bk";
-    let file_list = vec![
-        "/etc/default/grub",
-        // "/etc/systemd/sleep.conf.d/sleep.conf",
-        // "/etc/systemd/system/hibernate-preparation.service",
-        // "/etc/systemd/system/hibernate-resume.service",
-        // "/etc/systemd/system/systemd-logind.service.d/override.conf",
-        // "/etc/systemd/system/systemd-hibernate.service.d/override.conf",
-        // "/etc/systemd/system/systemd-suspend-then-hibernate.service.d/override.conf",
-    ];
+    let file_list = vec!["/etc/default/grub"];
 
     for i in file_list {
         let mut file_path = PathBuf::from(i);

@@ -344,6 +344,7 @@ dependencies = [
  "color-eyre",
  "envfile",
  "eyre",
+ "libc",
  "rust-embed",
  "sys-info",
 ]
