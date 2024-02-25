@@ -16,6 +16,26 @@ cargo build --release
 sudo ./target/release/hibernation-control enable
 ```
 
+## Steam Deck
+
+You will need a manual step to get it working with the Steam Deck. Add `resume` to `HOOKS` at `/etc/mkinitcpio.conf`
+
+Then you can execute:
+
+```sh
+sudo ./hibernate-control enable -s /path-to-your-swapfile
+```
+
+If don't want the new swapfile to be used for swap, you can run:
+
+_TODO_ set priority
+_TODO_ persist swap configuration (fstab or a systemd service)
+_TODO_ How do I add it to the menu?
+
+```sh
+sudo ./hibernate-control enable -s /path-to-your-swapfile --swapfile-size 16_000_000
+```
+
 ## Features
 
 - Set up a swapfile of appropriate size (2 time the RAM)
