@@ -167,24 +167,23 @@ checksum = "702fc72eb24e5a1e48ce58027a675bc24edd52096d5397d4aea7c6dd9eca0bd1"
 
 [[package]]
 name = "cmd_lib"
-version = "1.6.0"
+version = "1.9.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "66455dd56c2a82e34679003d080f44cb6c92bebe855f7945b4093c1c36d1c12d"
+checksum = "e5f4cbdcab51ca635c5b19c85ece4072ea42e0d2360242826a6fc96fb11f0d40"
 dependencies = [
  "cmd_lib_macros",
  "env_logger",
  "faccess",
  "lazy_static",
  "log",
- "main_error",
  "os_pipe",
 ]
 
 [[package]]
 name = "cmd_lib_macros"
-version = "1.6.0"
+version = "1.9.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "548393c11c2d876ebebab81196033ebfe61663702c6c8a176f97df07d4139ed2"
+checksum = "ae881960f7e2a409f91ef0b1c09558cf293031a1d6e8b45f908311f2a43f5fdf"
 dependencies = [
  "proc-macro-error",
  "proc-macro2",
@@ -395,12 +394,6 @@ name = "log"
 version = "0.4.20"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b5e6163cb8c49088c2c36f57875e58ccd8c87c7427f7fbd50ea6710b2f3f2e8f"
-
-[[package]]
-name = "main_error"
-version = "0.1.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "155db5e86c6e45ee456bf32fad5a290ee1f7151c2faca27ea27097568da67d1a"
 
 [[package]]
 name = "memchr"
